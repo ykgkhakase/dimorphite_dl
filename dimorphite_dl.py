@@ -72,15 +72,17 @@ def main(params=None):
     """
 
     parser = ArgParseFuncs.get_args()
-    args = vars(parser.parse_args())
-
-    if not args["silent"]:
-        print_header()
+    args, unknown = parser.parse_known_args()
+    args = vars(args)
 
     # Add in any parameters in params.
     if params is not None:
         for k, v in params.items():
             args[k] = v
+
+    if not args["silent"]:
+        print_header()
+        print("main args updated:", args)
 
     # If being run from the command line, print out all parameters.
     if __name__ == "__main__":
@@ -741,7 +743,7 @@ class ProtSubstructFuncs:
         for line in ProtSubstructFuncs.load_substructre_smarts_file():
             line = line.strip()
             sub = {}
-            if line is not "":
+            if line != "":
                 splits = line.split()
                 sub["name"] = splits[0]
                 sub["smart"] = splits[1]
